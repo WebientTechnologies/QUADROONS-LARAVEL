@@ -124,6 +124,11 @@ Route::get('/about', function () {
     return view('about');
 })->name('about');
 
+Route::get('/product', [HomeController::class, 'product'])->name('product');
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');

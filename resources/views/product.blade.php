@@ -351,18 +351,9 @@
             margin-top: 20px; /* Adjust the space above the category section */
         }
 
-        .subcategory-section {
-            margin-top: 20px; /* Adjust the space above the category section */
-        }
         .category-heading {
             font-size: 1.5em; /* Adjust the font size as needed */
             margin-bottom: 10px; /* Adjust the space below the heading */
-        }
-
-        .all {
-            font-size: 0.5em; /* Adjust the font size as needed */
-            margin-bottom: 10px;
-            margin-left: 15px;
         }
 
         .category-slider {
@@ -381,37 +372,6 @@
             min-height: 146px;
             margin-right: 10px; /* Adjust the gap between cards */
             text-align: center;
-        }
-        .subcategory-cards{
-            text-rendering: optimizeSpeed;
-            color: #000;
-            font-family: Montserrat,Times New Roman,serif;
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 1.25;
-            text-shadow: none;
-            box-sizing: border-box;
-            display: flex;
-            gap: 20px;
-            margin-top: 25px;
-        }
-
-        .subcategory-card{
-            text-rendering: optimizeSpeed;
-            font-family: Montserrat,Times New Roman,serif;
-            font-weight: 400;
-            line-height: 1.25;
-            text-shadow: none;
-            box-sizing: border-box;
-            color: #666;
-            font-size: 12px;
-            text-decoration: none;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
         }
 
         .category-card img {
@@ -444,30 +404,6 @@
             right: 0;
         }
 
-        .button.button_showMore{
-            text-rendering: optimizeSpeed;
-            font-family: Montserrat,Times New Roman,serif;
-            line-height: 1.25;
-            text-shadow: none;
-            box-sizing: border-box;
-            text-decoration: none;
-            align-items: center;
-            cursor: pointer;
-            display: flex;
-            font-weight: 500;
-            justify-content: center;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 16px;
-            height: 50px;
-            margin: 5px auto 0;
-            max-width: 152px;
-            box-shadow: 0 0 14px 0 #ececec;
-            background-color: #dc0909;
-            border: 1px solid #dc0909;
-            color: #fff;
-            margin-bottom:30px;
-        }
 
 
     </style>
@@ -481,6 +417,9 @@
                         <img src="/img/quad.png" alt="Stocko" class="page-header_logo">
                     </a>
                 </div> 
+            </div>
+            <div class="search-bar-box">
+                <div class="search-bar_wrapper"><input type="search" placeholder="Search fabrics by keywords..." required="required" class="input search-bar_input"> <button class="button button_searchBar"><span>Find a Fabric</span></button></div>               
             </div> 
             <div class="page-header_right">
                 <a href="{{ url('/about') }}" class="page-header_link">About</a> 
@@ -491,63 +430,43 @@
         </div>
         <div class = "layout-wrapper">
             <div>
-                <div class="main-banner"><img src="/img/banner2.jpeg" width="100%" height="100%"> 
-                    <div class="search-bar">
-                    <div class="search-bar-box">
-                        <h1 class="search-bar_title">Find fabrics for
-                            <span class="fade-enter-active fade-enter-to"> home</span>
-                        </h1> 
-                        <div class="search-bar_wrapper"><input type="search" placeholder="Search fabrics by keywords..." required="required" class="input search-bar_input"> <button class="button button_searchBar"><span>Find a Fabric</span></button>
-                        </div> <a href="/register?type=3" class="search-bar_link">I want to sell fabrics</a></div></div> 
-                </div>
                 <div class="home-page-content-section">
-                    <div class="category-section">
-                        <div  class="category-heading"> <h2>Browse by Composition<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
-                        <div class="category-slider">
-                            <div class="category-cards">
-                                @foreach($categories as $category)
-                                    <div class="category-card">
-                                        @php
-                                            $imageName = strtolower(str_replace(' ', '_', $category->category_name));
-                                        @endphp
-                                        <a href="{{ route('product', ['category' => $category->id]) }}">
-                                            <img src="/img/{{ $imageName }}.png" alt="{{ $category->category_name }}">
-                                            <p>{{ $category->category_name }}</p>
-                                        </a>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <button class="slider-button left">&lt;</button>
-                            <button class="slider-button right">&gt;</button>
-                        </div>
-                    </div>
-
-                    <div class="subcategory-section">
-                        <div  class="category-heading"> <h2>Browse by Structure<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
-                        
-                            <div class="subcategory-cards">
-                                @foreach($subcategories as $subcategory)
-                                    <div class="subcategory-card">
-                                        @php
-                                            $imageName = strtolower(str_replace(' ', '_', $subcategory->category_name));
-                                        @endphp
-                                        <a href="{{ route('product', ['subcategory' => $subcategory->id]) }}">
-                                            <img src="/img/{{ $imageName }}.jpg" alt="{{ $subcategory->category_name }}">
-                                            <p>{{ $subcategory->category_name }}</p>
-                                        </a>
-                                    </div>
-                                @endforeach
-                            </div>
-                    </div>
+                    
                     <!-- Add these dropdowns above the search bar -->
-                    <form action="{{ route('home') }}" method="get">
+                    <form action="{{ route('product') }}" method="get">
                         <!-- Add these dropdowns above the search bar -->
-                        
+                        <div class="filter-section">
+                            <label for="category">Category:</label>
+                            <select name="category" id="category" class="filter-dropdown">
+                                <option value="">All</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                @endforeach
+                            </select>
+
+                            <label for="subcategory">Subcategory:</label>
+                            <select name="subcategory" id="subcategory" class="filter-dropdown">
+                                <option value="">All</option>
+                                @foreach($subcategories as $subcategory)
+                                    <option value="{{ $subcategory->id }}">{{ $subcategory->category_name }}</option>
+                                @endforeach
+                            </select>
+
+                            <label for="unitType">Unit Type:</label>
+                            <select name="unitType" id="unitType" class="filter-dropdown">
+                                <option value="">All</option>
+                                @foreach($unitTypes as $unitType)
+                                    <option value="{{ $unitType->id }}">{{ $unitType->unit_type }}</option>
+                                @endforeach
+                            </select>
+
+                            <button type="submit" class="button button_applyFilter">Apply Filter</button>
+                        </div>
                     </form>
-                    <div  class="category-heading"> <h2>In Stock Now<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
+
                     <div class="container">
                         <div class="row">
-                            @foreach($products->take(5) as $index => $product)
+                            @foreach($products as $index => $product)
                                 <div class="col-md-2_4 mb-4">
                                     <div class="card custom-styling">
                                         @php
@@ -569,9 +488,6 @@
                                     <div class="row">
                                 @endif
                             @endforeach
-                        </div>
-                        <div class="text-center mt-3">
-                            <a href="{{ route('product') }}" class="button button_showMore">Show More</a>
                         </div>
                     </div>
                 </div>
@@ -606,34 +522,6 @@
             }
         });
     </script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const categoryCards = document.querySelector('.category-cards');
-        const sliderButtonLeft = document.querySelector('.slider-button.left');
-        const sliderButtonRight = document.querySelector('.slider-button.right');
-        let scrollAmount = 0;
-
-        sliderButtonLeft.addEventListener('click', function () {
-            scrollAmount += 150; // Adjust the scroll amount as needed
-            if (scrollAmount > 0) {
-                scrollAmount = 0;
-            }
-            categoryCards.style.transform = `translateX(${scrollAmount}px)`;
-        });
-
-        sliderButtonRight.addEventListener('click', function () {
-            const cardWidth = document.querySelector('.category-card').offsetWidth;
-            const maxScroll = (categoryCards.scrollWidth - categoryCards.clientWidth);
-            scrollAmount -= 150; // Adjust the scroll amount as needed
-            if (scrollAmount < -maxScroll) {
-                scrollAmount = -maxScroll;
-            }
-            categoryCards.style.transform = `translateX(${scrollAmount}px)`;
-        });
-    });
-</script>
-
 
 <footer class="footer">
     <div class="container">

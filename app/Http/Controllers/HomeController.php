@@ -93,6 +93,33 @@ class HomeController extends Controller
         return view('home', compact('products', 'categories', 'subcategories', 'unitTypes'));
     }
 
+    public function product(Request $request)
+    {
+        $products = Product::all();
+        $categories = ProductCategory::all();
+        $subcategories = ProductSubcategory::all();
+        $unitTypes = UnitType::all();
+
+        // Apply filters
+        if ($request->has('category')) {
+            $products = $products->where('category_id', $request->input('category'));
+        }
+
+        if ($request->has('subcategory')) {
+            $products = $products->where('sub_category_id', $request->input('subcategory'));
+        }
+
+        if ($request->has('unitType')) {
+            $products = $products->where('unit_id', $request->input('unitType'));
+        }
+
+        if($request->category == "" && $request->subcategory == "" && $request->unitType == "" ){
+            $products = Product::all();
+        }
+
+        return view('product', compact('products', 'categories', 'subcategories', 'unitTypes'));
+    }
+
     public function login()
     {
         return redirect(route('login'));
