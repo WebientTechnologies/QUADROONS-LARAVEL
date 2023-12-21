@@ -159,6 +159,11 @@ class Product extends BaseModel
         return $this->belongsTo(ProductCategory::class, 'category_id');
     }
 
+    public function industry(): BelongsTo
+    {
+        return $this->belongsTo(Industry::class, 'industry_id');
+    }
+
     public function unit(): BelongsTo
     {
         return $this->belongsTo(UnitType::class, 'unit_id');

@@ -54,6 +54,7 @@ use App\Http\Requests\Stripe\StoreStripeDetail;
 use App\Http\Requests\Tickets\StoreCustomTicket;
 use App\Models\TicketGroup;
 use App\Models\UnitType;
+use App\Models\Industry;
 
 class HomeController extends Controller
 {
@@ -72,8 +73,12 @@ class HomeController extends Controller
         $categories = ProductCategory::all();
         $subcategories = ProductSubcategory::all();
         $unitTypes = UnitType::all();
+        $industries = Industry::all();
 
         // Apply filters
+        if ($request->has('industry')) {
+            $products = $products->where('industry_id', $request->input('industry'));
+        }
         if ($request->has('category')) {
             $products = $products->where('category_id', $request->input('category'));
         }
@@ -90,7 +95,7 @@ class HomeController extends Controller
             $products = Product::all();
         }
 
-        return view('home', compact('products', 'categories', 'subcategories', 'unitTypes'));
+        return view('home', compact('products', 'categories', 'subcategories', 'unitTypes',  'industries'));
     }
 
     public function product(Request $request)
@@ -101,6 +106,11 @@ class HomeController extends Controller
         $unitTypes = UnitType::all();
 
         // Apply filters
+        if ($request->has('industry')) {
+            
+            $products = $products->where('industry_id', $request->input('industry'));
+            
+        }
         if ($request->has('category')) {
             $products = $products->where('category_id', $request->input('category'));
         }

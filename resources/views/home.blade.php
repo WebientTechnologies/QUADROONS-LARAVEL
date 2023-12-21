@@ -355,7 +355,7 @@
             margin-top: 20px; /* Adjust the space above the category section */
         }
         .category-heading {
-            font-size: 1.5em; /* Adjust the font size as needed */
+            font-size: 0.8em; /* Adjust the font size as needed */
             margin-bottom: 10px; /* Adjust the space below the heading */
         }
 
@@ -396,6 +396,20 @@
             margin-top: 25px;
         }
 
+        .industry-cards{
+            text-rendering: optimizeSpeed;
+            color: #000;
+            font-family: Montserrat,Times New Roman,serif;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.25;
+            text-shadow: none;
+            box-sizing: border-box;
+            display: flex;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
         .subcategory-card{
             text-rendering: optimizeSpeed;
             font-family: Montserrat,Times New Roman,serif;
@@ -412,6 +426,30 @@
             justify-content: center;
             overflow: hidden;
             position: relative;
+            text-align: center;
+        }
+
+        .industry-card{
+            text-rendering: optimizeSpeed;
+            font-family: Montserrat,Times New Roman,serif;
+            font-weight: 400;
+            line-height: 1.25;
+            text-shadow: none;
+            box-sizing: border-box;
+            color: #666;
+            font-size: 12px;
+            text-decoration: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            text-align: center;
+        }
+
+        .subcategory-text {
+            font-size: 20px
         }
 
         .category-card img {
@@ -502,7 +540,23 @@
                 </div>
                 <div class="home-page-content-section">
                     <div class="category-section">
-                        <div  class="category-heading"> <h2>Browse by Composition<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
+                        
+                        <div class="subcategory-section">
+                            
+                            <div  class="category-heading"> <h2>Browse by Product<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
+                            
+                                <div class="industry-cards">
+                                    @foreach($industries as $industry)
+                                        <div class="industry-card">
+                                            <a href="{{ route('product', ['industry' => $industry->id]) }}">
+                                                <img src="/img/{{$industry->image}}">
+                                                <p class="subcategory-text">{{ $industry->name }}</p>
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                        </div>
+                        <div  class="category-heading"> <h2>Browse by Category<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
                         <div class="category-slider">
                             <div class="category-cards">
                                 @foreach($categories as $category)
@@ -523,7 +577,7 @@
                     </div>
 
                     <div class="subcategory-section">
-                        <div  class="category-heading"> <h2>Browse by Structure<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
+                        <div  class="category-heading"> <h2>Browse by Sub Category<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
                         
                             <div class="subcategory-cards">
                                 @foreach($subcategories as $subcategory)
@@ -533,7 +587,7 @@
                                         @endphp
                                         <a href="{{ route('product', ['subcategory' => $subcategory->id]) }}">
                                             <img src="/img/{{ $imageName }}.jpg" alt="{{ $subcategory->category_name }}">
-                                            <p>{{ $subcategory->category_name }}</p>
+                                            <p class="subcategory-text">{{ $subcategory->category_name }}</p>
                                         </a>
                                     </div>
                                 @endforeach
@@ -544,7 +598,7 @@
                         <!-- Add these dropdowns above the search bar -->
                         
                     </form>
-                    <div  class="category-heading"> <h2>In Stock Now<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
+                    <div  class="category-heading"> <h2>Ready to Ship Goods<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
                     <div class="container">
                         <div class="row">
                             @foreach($products->take(5) as $index => $product)
@@ -624,6 +678,33 @@
 
         sliderButtonRight.addEventListener('click', function () {
             const cardWidth = document.querySelector('.category-card').offsetWidth;
+            const maxScroll = (categoryCards.scrollWidth - categoryCards.clientWidth);
+            scrollAmount -= 150; // Adjust the scroll amount as needed
+            if (scrollAmount < -maxScroll) {
+                scrollAmount = -maxScroll;
+            }
+            categoryCards.style.transform = `translateX(${scrollAmount}px)`;
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const categoryCards = document.querySelector('.industry-cards');
+        const sliderButtonLeft = document.querySelector('.slider-button.left');
+        const sliderButtonRight = document.querySelector('.slider-button.right');
+        let scrollAmount = 0;
+
+        sliderButtonLeft.addEventListener('click', function () {
+            scrollAmount += 150; // Adjust the scroll amount as needed
+            if (scrollAmount > 0) {
+                scrollAmount = 0;
+            }
+            categoryCards.style.transform = `translateX(${scrollAmount}px)`;
+        });
+
+        sliderButtonRight.addEventListener('click', function () {
+            const cardWidth = document.querySelector('.industry-card').offsetWidth;
             const maxScroll = (categoryCards.scrollWidth - categoryCards.clientWidth);
             scrollAmount -= 150; // Adjust the scroll amount as needed
             if (scrollAmount < -maxScroll) {
