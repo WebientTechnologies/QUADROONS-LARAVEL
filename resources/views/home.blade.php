@@ -113,6 +113,17 @@
             height: 300px;
             position: relative;
             width: 100vw;
+            overflow: hidden;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slide {
+            min-width: 100%;
+            overflow: hidden;
         }
 
         .button_signIn {
@@ -199,7 +210,6 @@
             box-sizing: border-box;
             font: inherit;
             align-items: center;
-            background-color: #dc0909;
             border: 1px solid #dc0909;
             color: #fff;
             cursor: pointer;
@@ -210,7 +220,7 @@
             border-radius: 0 7px 7px 0;
             font-size: 16px;
             height: 50px;
-            min-width: 161px;
+            min-width: 64px;
         }
 
         .search-bar_link {
@@ -529,14 +539,28 @@
         </div>
         <div class = "layout-wrapper">
             <div>
-                <div class="main-banner"><img src="/img/banner2.jpeg" width="100%" height="100%"> 
+                <div class="main-banner">
+                    <div class="slider">
+                        <div class="slide">
+                            <img src="/img/banner2.jpeg" alt="Slider Image 1" width="100%" height="100%">
+                        </div>
+                        <div class="slide">
+                            <img src="/img/banner1.jpg" alt="Slider Image 2" width="100%" height="100%">
+                        </div>
+                        <div class="slide">
+                            <img src="/img/bbb.jpg" alt="Slider Image 3" width="100%" height="100%">
+                        </div>
+                        <!-- Add more slides as needed -->
+                    </div>
+
                     <div class="search-bar">
-                    <div class="search-bar-box">
-                        <h1 class="search-bar_title">Find fabrics for
-                            <span class="fade-enter-active fade-enter-to"> home</span>
-                        </h1> 
-                        <div class="search-bar_wrapper"><input type="search" placeholder="Search fabrics by keywords..." required="required" class="input search-bar_input"> <button class="button button_searchBar"><span>Find a Fabric</span></button>
-                        </div> <a href="/register?type=3" class="search-bar_link">I want to sell fabrics</a></div></div> 
+                        <div class="search-bar-box">
+                            <div class="search-bar_wrapper">
+                                <input type="search" placeholder="Search fabrics by keywords..." required="required" class="input search-bar_input">
+                                <img src="/img/search-logo.jpg" alt="Find a Fabric" class="search-button" style="width: 64px; height: 50px; border: 1px solid #fff; cursor: pointer; border-radius: 0 7px 7px 0;" onclick="findFabric()">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="home-page-content-section">
                     <div class="category-section">
@@ -577,7 +601,7 @@
                     </div>
 
                     <div class="subcategory-section">
-                        <div  class="category-heading"> <h2>Browse by Sub Category<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
+                        <div  class="category-heading"> <h2>Browse by Usage<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
                         
                             <div class="subcategory-cards">
                                 @foreach($subcategories as $subcategory)
@@ -640,7 +664,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.querySelector('.search-bar_input');
-            const searchButton = document.querySelector('.button_searchBar');
+            const searchButton = document.querySelector('.search-button');
             searchButton.addEventListener('click', performSearch);
 
             searchInput.addEventListener('keyup', function (event) {
@@ -712,6 +736,26 @@
             }
             categoryCards.style.transform = `translateX(${scrollAmount}px)`;
         });
+    });
+</script>
+
+<script>
+        $(document).ready(function () {
+        let currentIndex = 0;
+        const slides = $('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide() {
+            currentIndex++;
+            if (currentIndex >= totalSlides) {
+                currentIndex = 0;
+            }
+
+            const translateValue = -currentIndex * 100 + '%';
+            $('.slider').css('transform', 'translateX(' + translateValue + ')');
+        }
+
+        setInterval(showSlide, 3000);
     });
 </script>
 
