@@ -12,6 +12,7 @@
         body {
             margin: 0; /* Remove default margin */
             padding: 0; /* Remove default padding */
+            overflow-x:hidden;
         }
 
         #page {
@@ -110,7 +111,7 @@
             line-height: 1.25;
             text-shadow: none;
             box-sizing: border-box;
-            height: 300px;
+            height: 100%;
             position: relative;
             width: 100vw;
             overflow: hidden;
@@ -148,9 +149,10 @@
             box-sizing: border-box;
             bottom: 0;
             position: absolute;
-            right: 0;
-            top: calc(25% + 40px);
+            top: calc(35% + 40px);
             width: 100%;
+            left: 17%;
+            
         }
 
         .search-bar-box {
@@ -367,6 +369,9 @@
         .category-heading {
             font-size: 0.8em; /* Adjust the font size as needed */
             margin-bottom: 10px; /* Adjust the space below the heading */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .all {
@@ -467,29 +472,19 @@
             max-height: 100%;
         }
 
+        
+        .slider-arrows {
+            display: flex;
+            align-items: center;
+        }
+
         .slider-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #3498db; /* Arrow color */
-            font-size: 50px; /* Adjust the arrow size */
+            padding: 5px 10px;
+            background-color: #ccc;
+            text-decoration: none;
+            color: #333;
             cursor: pointer;
-            background: transparent; /* Transparent background */
-            border: none;
-            padding: 2px; /* Adjust padding as needed for button size */
-            transition: color 0.3s ease;
-        }
-
-        .slider-button:hover {
-            background-color: #2980b9; /* Change background color on hover */
-        }
-
-        .left {
-            left: 0;
-        }
-
-        .right {
-            right: 0;
+            margin-left: 10px;
         }
 
         .button.button_showMore{
@@ -572,7 +567,7 @@
                                 <div class="industry-cards">
                                     @foreach($industries as $industry)
                                         <div class="industry-card">
-                                            <a href="{{ route('product', ['industry' => $industry->id]) }}">
+                                            <a href="{{ route('product', ['industry' => $industry->id]) }}" style = "text-decoration:none;">
                                                 <img src="/img/{{$industry->image}}">
                                                 <p class="subcategory-text">{{ $industry->name }}</p>
                                             </a>
@@ -580,25 +575,31 @@
                                     @endforeach
                                 </div>
                         </div>
-                        <div  class="category-heading"> <h2>Browse by Category<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
-                        <div class="category-slider">
-                            <div class="category-cards">
-                                @foreach($categories as $category)
-                                    <div class="category-card">
-                                        @php
-                                            $imageName = strtolower(str_replace(' ', '_', $category->category_name));
-                                        @endphp
-                                        <a href="{{ route('product', ['category' => $category->id]) }}">
-                                            <img src="/img/{{ $imageName }}.png" alt="{{ $category->category_name }}">
-                                            <p>{{ $category->category_name }}</p>
-                                        </a>
+
+                        <div class="subcategory-section">
+                                <div  class="category-heading"> <h2>Browse by Category<a href="{{ route('product') }}" class= "all">See All</a></h2> 
+                                    <div clsss= "slider-arrows"> 
+                                    <a class="button slider-button left">&lt;</a>
+                                    <a class="button slider-button right">&gt;</a>
                                     </div>
-                                @endforeach
+                                </div>
+                                <div class="category-slider">
+                                    <div class="category-cards">
+                                        @foreach($categories as $category)
+                                            <div class="category-card">
+                                                @php
+                                                    $imageName = strtolower(str_replace(' ', '_', $category->category_name));
+                                                @endphp
+                                                <a href="{{ route('product', ['category' => $category->id]) }}" style = "text-decoration:none;">
+                                                    <img src="/img/{{ $imageName }}.png" alt="{{ $category->category_name }}">
+                                                    <p>{{ $category->category_name }}</p>
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
-                            <button class="slider-button left">&lt;</button>
-                            <button class="slider-button right">&gt;</button>
                         </div>
-                    </div>
 
                     <div class="subcategory-section">
                         <div  class="category-heading"> <h2>Browse by Usage<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
@@ -609,7 +610,7 @@
                                         @php
                                             $imageName = strtolower(str_replace(' ', '_', $subcategory->category_name));
                                         @endphp
-                                        <a href="{{ route('product', ['subcategory' => $subcategory->id]) }}">
+                                        <a href="{{ route('product', ['subcategory' => $subcategory->id]) }}" style = "text-decoration:none;">
                                             <img src="/img/{{ $imageName }}.jpg" alt="{{ $subcategory->category_name }}">
                                             <p class="subcategory-text">{{ $subcategory->category_name }}</p>
                                         </a>
@@ -622,34 +623,36 @@
                         <!-- Add these dropdowns above the search bar -->
                         
                     </form>
-                    <div  class="category-heading"> <h2>Ready to Ship Goods<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
-                    <div class="container">
-                        <div class="row">
-                            @foreach($products->take(5) as $index => $product)
-                                <div class="col-md-2_4 mb-4">
-                                    <div class="card custom-styling">
-                                        @php
-                                            $productImage = $product->default_image ? $product->default_image : '/img/1.jpg';
-                                        @endphp
-                                        <div class="card-img-container">
-                                            <img src="{{ $productImage }}" class="card-img-top" alt="Product Image">
-                                        </div>
-                                        <div class="card-info-container">
-                                            <h5 class="card-title">{{ $product->name }}</h5>
-                                            <p class="card-text">Price: {{ $product->price }}</p>
-                                            <p class="card-text">{{ $product->description }}</p>
+                    <div class="subcategory-section">
+                        <div  class="category-heading"> <h2>Ready to Ship Goods<a href="{{ route('product') }}" class= "all">See All</a></h2></div>
+                        <div class="container">
+                            <div class="row">
+                                @foreach($products->take(5) as $index => $product)
+                                    <div class="col-md-2_4 mb-4">
+                                        <div class="card custom-styling">
+                                            @php
+                                                $productImage = $product->default_image ? $product->default_image : '/img/1.jpg';
+                                            @endphp
+                                            <div class="card-img-container">
+                                                <img src="{{ $productImage }}" class="card-img-top" alt="Product Image">
+                                            </div>
+                                            <div class="card-info-container">
+                                                <h5 class="card-title">{{ $product->name }}</h5>
+                                                <p class="card-text">Price: {{ $product->price }}</p>
+                                                <p class="card-text">{{ $product->description }}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                @if(($index + 1) % 5 == 0)
-                                    </div>
-                                    <div class="row">
-                                @endif
-                            @endforeach
-                        </div>
-                        <div class="text-center mt-3">
-                            <a href="{{ route('product') }}" class="button button_showMore">Show More</a>
+                                    @if(($index + 1) % 5 == 0)
+                                        </div>
+                                        <div class="row">
+                                    @endif
+                                @endforeach
+                            </div>
+                            <div class="text-center mt-3">
+                                <a href="{{ route('product') }}" class="button button_showMore">Show More</a>
+                            </div>
                         </div>
                     </div>
                 </div>
